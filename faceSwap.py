@@ -136,9 +136,9 @@ if __name__ == '__main__' :
     filename1 = 'ted_cruz.jpg'
     filename2 = 'donald_trump.jpg'
     
-    img1 = cv2.imread(filename1);
-    img2 = cv2.imread(filename2);
-    img1Warped = np.copy(img2);    
+    img1 = cv2.imread(filename1)
+    img2 = cv2.imread(filename2)
+    img1Warped = np.copy(img2)
     
     # Read array of corresponding points
     points1 = readPoints(filename1 + '.txt')
@@ -196,6 +196,5 @@ if __name__ == '__main__' :
     
     cv2.imshow("Face Swapped", output)
     cv2.waitKey(0)
-    
     cv2.destroyAllWindows()
         

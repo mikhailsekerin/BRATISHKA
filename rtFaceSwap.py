@@ -166,7 +166,7 @@ while(True):
             sys.exit(1)
 
         # Read images
-        filename1 = 'ted_cruz.jpg'
+        filename1 = 'hillary_clinton.jpg'
         filename2 = 'donald_trump.jpg'
 
         img1 = cv2.imread(filename1);

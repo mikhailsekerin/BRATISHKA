@@ -14,7 +14,7 @@ def get_landmarks(im):
     rects = detector(im, 1)
 
     if len(rects) > 1:
-        print("error1")
+        print("2 faces")
     if len(rects) == 0:
         print("error2")
 
@@ -139,6 +139,62 @@ def warpTriangle(img1, img2, t1, t2):
 
     img2[r2[1]:r2[1] + r2[3], r2[0]:r2[0] + r2[2]] = img2[r2[1]:r2[1] + r2[3], r2[0]:r2[0] + r2[2]] + img2Rect
 
+def swap(img1, img2):
+
+    img1Warped = np.copy(img2)
+
+    points1 = get_landmarks(img1)
+    points2 = get_landmarks(img2)
+
+    # Find convex hull
+    hull1 = []
+    hull2 = []
+
+    hullIndex = cv2.convexHull(np.array(points2), returnPoints=False)
+
+    for i in range(0, len(hullIndex)):
+        hull1.append(points1[int(hullIndex[i])])
+        hull2.append(points2[int(hullIndex[i])])
+
+    # Find delanauy traingulation for convex hull points
+    sizeImg2 = img2.shape
+    rect = (0, 0, sizeImg2[1], sizeImg2[0])
+
+
+    dt = calculateDelaunayTriangles(rect, hull2)
+
+    if len(dt) == 0:
+        quit()
+
+    # Apply affine transformation to Delaunay triangles
+    for i in range(0, len(dt)):
+        t1 = []
+        t2 = []
+
+        # get points for img1, img2 corresponding to the triangles
+        for j in range(0, 3):
+            t1.append(hull1[dt[i][j]])
+            t2.append(hull2[dt[i][j]])
+
+        warpTriangle(img1, img1Warped, t1, t2)
+
+    # Calculate Mask
+    hull8U = []
+    for i in range(0, len(hull2)):
+        hull8U.append((hull2[i][0], hull2[i][1]))
+
+    mask = np.zeros(img2.shape, dtype=img2.dtype)
+
+    cv2.fillConvexPoly(mask, np.int32(hull8U), (255, 255, 255))
+
+    r = cv2.boundingRect(np.float32([hull2]))
+
+    center = ((r[0] + int(r[2] / 2), r[1] + int(r[3] / 2)))
+
+    # Clone seamlessly.
+    output = cv2.seamlessClone(np.uint8(img1Warped), img2, mask, center, cv2.NORMAL_CLONE)
+
+    return output
 
 
 cap = cv2.VideoCapture(0)
@@ -154,7 +210,7 @@ while(True):
         break
 
     if mode == 0:
-        cv2.imshow("face", frame)
+        cv2.imshow("Face swap", frame)
 
     if mode == 1:
 
@@ -166,64 +222,16 @@ while(True):
             sys.exit(1)
 
         # Read images
-        filename1 = 'hillary_clinton.jpg'
-        filename2 = 'donald_trump.jpg'
 
-        img1 = cv2.imread(filename1);
-        img2 = frame
-        img1Warped = np.copy(img2);
+        img1 = frame[0: frame.shape[0], 0: int(frame.shape[1] / 2)]
+        img2 = frame[0: frame.shape[0], int(frame.shape[1] / 2): frame.shape[1]]
 
-        points1 = get_landmarks(img1)
-        points2 = get_landmarks(img2)
+        leftframe = swap(img1, img2)
+        rightframe = swap(img2, img1)
 
-        # Find convex hull
-        hull1 = []
-        hull2 = []
-
-        hullIndex = cv2.convexHull(np.array(points2), returnPoints=False)
-
-        for i in range(0, len(hullIndex)):
-            hull1.append(points1[int(hullIndex[i])])
-            hull2.append(points2[int(hullIndex[i])])
-
-        # Find delanauy traingulation for convex hull points
-        sizeImg2 = img2.shape
-        rect = (0, 0, sizeImg2[1], sizeImg2[0])
-
-        print(hull2)
-
-        dt = calculateDelaunayTriangles(rect, hull2)
-
-        if len(dt) == 0:
-            quit()
-
-        # Apply affine transformation to Delaunay triangles
-        for i in range(0, len(dt)):
-            t1 = []
-            t2 = []
-
-            # get points for img1, img2 corresponding to the triangles
-            for j in range(0, 3):
-                t1.append(hull1[dt[i][j]])
-                t2.append(hull2[dt[i][j]])
-
-            warpTriangle(img1, img1Warped, t1, t2)
-
-        # Calculate Mask
-        hull8U = []
-        for i in range(0, len(hull2)):
-            hull8U.append((hull2[i][0], hull2[i][1]))
-
-        mask = np.zeros(img2.shape, dtype=img2.dtype)
-
-        cv2.fillConvexPoly(mask, np.int32(hull8U), (255, 255, 255))
-
-        r = cv2.boundingRect(np.float32([hull2]))
-
-        center = ((r[0] + int(r[2] / 2), r[1] + int(r[3] / 2)))
-
-        # Clone seamlessly.
-        output = cv2.seamlessClone(np.uint8(img1Warped), img2, mask, center, cv2.NORMAL_CLONE)
+        output = frame
+        output[0: frame.shape[0], 0: int(frame.shape[1] / 2)] = rightframe
+        output[0: frame.shape[0], int(frame.shape[1] / 2): frame.shape[1]] = leftframe
 
         cv2.imshow("Face Swapped", output)
 

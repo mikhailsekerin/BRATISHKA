@@ -1,75 +1,7 @@
 <html>
 <head>
 <title>Face Swap Projektdokumentation</title>
-<style>
-body {
-	background-color: #00a5a5;
-	font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
-	
-}
-blockquote {
-	margin-left: 20%;
-	margin-right: 20%;
-	padding-left: 3%;	
-	padding-right: 3%;	
-	padding-top: 1%;
-	padding-bottom: 2%;
-	background-color: #ffffff;
-}
-ul {
-    list-style-type: circle;
-}
-a {
-    color: #00A5A5;
-	text-decoration: none;
-}
-a:hover {
-    text-decoration: underline;
-}
-.text {
-	clear: both;
-	text-align: justify;
-	display: block;
-}
-h1 {
-	font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
-	font-size: 24px;
-	font-style: normal;
-	font-variant: normal;
-	font-weight: 500;
-	line-height: 26.4px;
-}
-h3 {
-	clear: both;
-	font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
-	font-size: 16px;
-	font-style: normal;
-	font-variant: normal;
-	font-weight: 700;
-	line-height: 15.4px;
-}
-div.gallery {
-    margin: 15px;
-    border: 1px solid #ccc;
-    float: left;
-    width: 180px;
-}
 
-div.gallery:hover {
-    border: 1px solid #777;
-}
-
-div.gallery img {
-    width: 100%;
-    height: auto;
-}
-
-div.desc {
-    padding: 5px;
-    text-align: center;
-	font-size: 14px;
-}
-</style>
 </head>
 <body>
 <blockquote>

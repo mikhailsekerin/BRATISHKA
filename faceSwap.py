@@ -47,7 +47,7 @@ def rectContains(rect, point) :
 #calculate delanauy triangle
 def calculateDelaunayTriangles(rect, points):
     #create subdiv
-    subdiv = cv2.Subdiv2D(rect);
+    subdiv = cv2.Subdiv2D(rect)
     
     # Insert points into subdiv
     for p in points:
@@ -133,12 +133,12 @@ if __name__ == '__main__' :
         sys.exit(1)
 
     # Read images
-    filename1 = 'ted_cruz.jpg'
+    filename1 = 'hillary_clinton.jpg'
     filename2 = 'donald_trump.jpg'
     
-    img1 = cv2.imread(filename1);
-    img2 = cv2.imread(filename2);
-    img1Warped = np.copy(img2);    
+    img1 = cv2.imread(filename1)
+    img2 = cv2.imread(filename2)
+    img1Warped = np.copy(img2)
     
     # Read array of corresponding points
     points1 = readPoints(filename1 + '.txt')
@@ -196,6 +196,5 @@ if __name__ == '__main__' :
     
     cv2.imshow("Face Swapped", output)
     cv2.waitKey(0)
-    
     cv2.destroyAllWindows()
         

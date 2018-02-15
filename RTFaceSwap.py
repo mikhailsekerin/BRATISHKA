@@ -6,9 +6,9 @@ import dlib
 
 
 detector = dlib.get_frontal_face_detector()
+predictor_path = "shape_predictor_68_face_landmarks.dat"
 predictor = dlib.shape_predictor(predictor_path)
 
-predictor_path = "shape_predictor_68_face_landmarks.dat"
 
 def get_landmarks(im):
     rects = detector(im, 1)
